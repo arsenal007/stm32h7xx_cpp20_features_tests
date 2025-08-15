@@ -15,10 +15,35 @@ This project is a minimal firmware for the STM32H743 microcontroller that period
 - Connect UART TX pin of STM32H743 to USB-UART adapter (default: USART3 / PD8)
 - Configure your serial monitor to `115200 bps`
 
-## Build & Flash
+## Build with Docker (recommended)
+
+> The Docker files live in the `docker/` folder.
+
+### 1) Build the Docker image
 ```bash
-cmake -S . -B build -G Ninja
+docker build -t stm32-alpine:latest docker
+
+### 2) Run a container with the project mounted
+
+docker run --rm -it \
+  --name stm32-build \
+  -v "$PWD":/work \
+  -w /work \
+  stm32-alpine:latest \
+  bash
+
+    Windows PowerShell: use -v "${PWD}:/work".
+    CMD: use -v %cd%:/work.
+
+### 3) Configure & build inside the container
+
+cmake -S . -B build -G Ninja \
+  -DCMAKE_TOOLCHAIN_FILE=cmake/toolchain-arm-none-eabi.cmake \
+  -DCMAKE_BUILD_TYPE=Release
 cmake --build build --parallel
+
+Artifacts (e.g. *.elf, *.bin) will be in build/.
+
 
 Flash using ST-Link:
 
