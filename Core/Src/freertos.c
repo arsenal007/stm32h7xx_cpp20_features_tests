@@ -26,6 +26,7 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 #include "usart.h"
+#include <stdio.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -49,18 +50,18 @@ static osThreadId_t uartTaskHandle;
 static const osThreadAttr_t uartTask_attributes = {
     .name = "uartTask",
     .priority = (osPriority_t)osPriorityNormal,
-    .stack_size = 128 * 4};
+    .stack_size = 128 * 8};
 
-    // ===== TASK FUNCTION =====
+// ===== TASK FUNCTION =====
 void StartUartTask(void *argument)
 {
   (void)argument;
-  const char *msg = "Hello from STM32\r\n";
-
+  float dummy_float = 0.0f;
   for (;;)
   {
-    HAL_UART_Transmit(&huart1, (uint8_t *)msg, strlen(msg), HAL_MAX_DELAY);
-    osDelay(1000); // 1000 ms = 1 секунда
+    printf("Hello from STM32 %f\n", dummy_float);
+    osDelay(1000); // 1000 ms = 1sec
+    dummy_float += 1.01f;
   }
 }
 
@@ -68,9 +69,9 @@ void StartUartTask(void *argument)
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
 const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
+    .name = "defaultTask",
+    .stack_size = 128 * 4,
+    .priority = (osPriority_t)osPriorityNormal,
 };
 
 /* Private function prototypes -----------------------------------------------*/
@@ -83,11 +84,12 @@ void StartDefaultTask(void *argument);
 void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 
 /**
-  * @brief  FreeRTOS initialization
-  * @param  None
-  * @retval None
-  */
-void MX_FREERTOS_Init(void) {
+ * @brief  FreeRTOS initialization
+ * @param  None
+ * @retval None
+ */
+void MX_FREERTOS_Init(void)
+{
   /* USER CODE BEGIN Init */
 
   uartTaskHandle = osThreadNew(StartUartTask, NULL, &uartTask_attributes);
@@ -121,7 +123,6 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN RTOS_EVENTS */
   /* add events, ... */
   /* USER CODE END RTOS_EVENTS */
-
 }
 
 /* USER CODE BEGIN Header_StartDefaultTask */
@@ -147,4 +148,3 @@ void StartDefaultTask(void *argument)
 /* USER CODE BEGIN Application */
 
 /* USER CODE END Application */
-

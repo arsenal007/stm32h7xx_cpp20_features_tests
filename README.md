@@ -25,16 +25,14 @@ docker build -t stm32-alpine:latest docker
 
 ### 2) Run a container with the project mounted
 
-docker run --rm -it \
-  --name stm32-build \
-  -v "$PWD":/work \
-  -w /work \
-  stm32-alpine:latest \
-  bash
+docker run --rm -it --add-host=host.docker.internal:host-gateway --name stm32-build -v "$PWD":/work -w /work stm32-alpine:latest bash
 
     Windows PowerShell: use -v "${PWD}:/work".
     CMD: use -v %cd%:/work.
 
+### stop docker container
+docker stop stm32-build
+```
 ### 3) Configure & build inside the container
 
 cmake -S . -B build -G Ninja \
