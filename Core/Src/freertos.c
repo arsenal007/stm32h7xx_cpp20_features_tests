@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "usart.h"
 #include <stdio.h>
+#include <coroutines_task.h>
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -91,7 +92,7 @@ void MX_FREERTOS_Init(void); /* (MISRA C 2004 rule 8.1) */
 void MX_FREERTOS_Init(void)
 {
   /* USER CODE BEGIN Init */
-
+  coroutines_task();
   uartTaskHandle = osThreadNew(StartUartTask, NULL, &uartTask_attributes);
 
   /* USER CODE END Init */

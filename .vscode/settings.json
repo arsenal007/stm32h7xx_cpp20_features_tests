@@ -1,5 +1,7 @@
 {
     "files.associations": {
-        "memorymap.h": "c"
+        "memorymap.h": "c",
+        "optional": "cpp",
+        "coroutines_task.h": "c"
     }
 }
