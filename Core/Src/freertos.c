@@ -61,7 +61,7 @@ void StartUartTask(void *argument)
   for (;;)
   {
     printf("Hello from STM32 %f\n", dummy_float);
-    osDelay(1000); // 1000 ms = 1sec
+    osDelay(10000); // 10000 ms = 10sec
     dummy_float += 1.01f;
   }
 }

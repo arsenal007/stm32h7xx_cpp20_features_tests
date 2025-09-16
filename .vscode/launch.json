@@ -5,13 +5,28 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Cortex-Debug (OpenOCD)",
+            "name": "docker (OpenOCD)",
             "type": "cortex-debug",
             "request": "launch",
             "executable": "${workspaceFolder}/build/STM32_debug_uart.elf",
             "device": "STM32H743ZI",
             "servertype": "external",
-            "gdbTarget": "host.docker.internal:3333", 
+            "gdbTarget": "host.docker.internal:3333",
+            "cwd": "${workspaceFolder}",
+            "gdbPath": "gdb-multiarch",
+            "preLaunchCommands": [
+                "monitor reset halt",
+                "load"
+            ]
+        },
+        {
+            "name": "localhost (OpenOCD) ",
+            "type": "cortex-debug",
+            "request": "launch",
+            "executable": "${workspaceFolder}/build/STM32_debug_uart.elf",
+            "device": "STM32H743ZI",
+            "servertype": "external",
+            "gdbTarget": "localhost:3333",
             "cwd": "${workspaceFolder}",
             "gdbPath": "gdb-multiarch",
             "preLaunchCommands": [
@@ -19,6 +34,5 @@
                 "load"
             ]
         }
-
     ]
 }

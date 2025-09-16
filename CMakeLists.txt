@@ -51,7 +51,9 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_SOURCE_DIR}/Core/Src/gettimeofday.c
-    ${CMAKE_SOURCE_DIR}/cpp/Src/co_awaiters.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp
 )
 
 # Add include paths
