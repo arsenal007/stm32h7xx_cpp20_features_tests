@@ -8,12 +8,13 @@
 
 namespace task_example
 {
+  // --- awaitable ---
   struct Event
   {
     std::optional<int> value{};
     std::coroutine_handle<> waiter{};
 
-    // --- awaitable interface ---
+  
     bool await_ready() const noexcept { return value.has_value(); }
     void await_suspend(std::coroutine_handle<> h) noexcept { waiter = h; }
 
