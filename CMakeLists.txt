@@ -19,7 +19,7 @@ if(NOT CMAKE_BUILD_TYPE)
 endif()
 
 # Set the project name
-set(CMAKE_PROJECT_NAME STM32_debug_uart)
+set(CMAKE_PROJECT_NAME STM32_cpp20)
 
 # Include toolchain file
 include("cmake/gcc-arm-none-eabi.cmake")
@@ -51,7 +51,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_SOURCE_DIR}/Core/Src/gettimeofday.c
-    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_pass_over_argument.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_promise.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp

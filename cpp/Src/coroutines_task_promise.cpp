@@ -27,7 +27,6 @@ namespace task_example_with_passing_data_over_promise
     using promise_type = promise;
 
     explicit Task(handle_t);
-    // Task(Task &&o) noexcept : handler(o.handler) { o.handler = {}; }
     Task(Task &&o) = delete;
     Task(const Task &) = delete;
     ~Task();
