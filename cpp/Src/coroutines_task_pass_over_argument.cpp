@@ -5,6 +5,7 @@
 #include <simple.hpp> // execute::simple
 #include <handler.hpp>
 #include <runtime_initial_suspend.hpp>
+#include "tim.h"
 
 namespace task_example
 {
@@ -90,4 +91,5 @@ void coroutines_task(void)
   simple::execute();
   runtime_initial_suspend::execute();
   task_example::execute();
+  HAL_TIM_Base_Start_IT(&htim7); // start timer with interrupt
 }
