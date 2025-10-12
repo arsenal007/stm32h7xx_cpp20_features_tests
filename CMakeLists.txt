@@ -55,6 +55,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_promise.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/delayed_execution.cpp
 )
 
 # Add include paths

@@ -11,7 +11,22 @@
             "executable": "${workspaceFolder}/build/STM32_cpp20.elf",
             "device": "STM32H743ZI",
             "servertype": "external",
-            "gdbTarget": "host.docker.internal:3333",
+            "gdbTarget": "192.168.0.14:3333",
+            "cwd": "${workspaceFolder}",
+            "gdbPath": "gdb-multiarch",
+            "preLaunchCommands": [
+                "monitor reset halt",
+                "load"
+            ]
+        },
+        {
+            "name": "localnet (OpenOCD)",
+            "type": "cortex-debug",
+            "request": "launch",
+            "executable": "${workspaceFolder}/build/STM32_cpp20.elf",
+            "device": "STM32H743ZI",
+            "servertype": "external",
+            "gdbTarget": "192.168.0.14:3333",
             "cwd": "${workspaceFolder}",
             "gdbPath": "gdb-multiarch",
             "preLaunchCommands": [
