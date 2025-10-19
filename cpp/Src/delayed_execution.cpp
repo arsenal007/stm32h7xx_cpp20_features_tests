@@ -18,6 +18,7 @@ void interrupt_simple_timer(void)
 
 void delayed_execution(std::function<void(void)> && callback)
 {
+    MX_TIM7_Init();
     // start timer with interrupt 5sec
     HAL_TIM_Base_Start_IT(&htim7); 
     g_interrupt_handler = callback;

@@ -58,6 +58,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/delayed_execution.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/parse_uart_command.cpp
 )
 
 # Add include paths

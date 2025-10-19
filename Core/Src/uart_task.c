@@ -4,7 +4,7 @@
 #include "queue.h"
 #include "cmsis_os2.h"
 
-static TaskHandle_t uartRxTaskHandle; 
+static TaskHandle_t uartRxTaskHandle;
 
 static const osThreadAttr_t uartRxTask_attributes = {
     .name = "uart_rx_task",
@@ -13,11 +13,11 @@ static const osThreadAttr_t uartRxTask_attributes = {
 
 #define RX_BUF_SIZE 256
 
-#include <stdio.h>
+#include "parse_uart_command.h"
 void ProcessMessage(uint8_t *msg, uint32_t len)
 {
     (void)len;
-    printf("%s\n", msg);
+    parse_uart_command((const char *)msg);
 }
 
 static void UartRxTask(void *argument)
