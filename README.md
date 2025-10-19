@@ -47,6 +47,9 @@ Flash using ST-Link:
 
 st-flash write build/<firmware>.bin 0x08000000
 
+install dev-tunnel cli on linux (if you don't have it yet):
+curl -sL https://aka.ms/DevTunnelCliInstall | bash
+
 License
 
 MIT

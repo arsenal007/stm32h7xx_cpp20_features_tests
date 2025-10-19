@@ -51,6 +51,7 @@ target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_SOURCE_DIR}/Core/Src/gettimeofday.c
+    ${CMAKE_SOURCE_DIR}/Core/Src/uart_task.c
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_pass_over_argument.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_promise.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
