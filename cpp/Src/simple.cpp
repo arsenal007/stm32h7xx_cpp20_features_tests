@@ -1,11 +1,12 @@
 #include <coroutine>
 #include <optional>
 #include <cstdio>
+#include <memory>
 #include <coroutines_task.h>
 #include <handler.hpp>
 #include <simple.hpp>
 
-namespace simple
+namespace
 {
   // promise type suspend_always
   class suspend_always
@@ -29,8 +30,6 @@ namespace simple
     void return_void() {}
   };
 
-
-
   Handler<suspend_always> initial_suspend_always(void)
   {
     printf("This message should not be shown because we suspend it at the initial stage\n");
@@ -43,10 +42,16 @@ namespace simple
     co_return;
   }
 
+  Handler<suspend_always> handler_initially_suspended_always{};
+  Handler<suspend_never> handler_initially_suspended_never{};
+}
+
+namespace simple
+{
 
   void execute(void)
   {
-    Handler<suspend_always> handler_initially_suspended = initial_suspend_always();
-    Handler<suspend_never> handler_initially_not_suspended = initial_suspend_never();
+    handler_initially_suspended_always = initial_suspend_always();
+    handler_initially_suspended_never = initial_suspend_never();
   }
 }

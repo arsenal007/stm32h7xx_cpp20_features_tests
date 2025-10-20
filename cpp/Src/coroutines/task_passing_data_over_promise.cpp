@@ -1,10 +1,11 @@
 #include <coroutine>
 #include <optional>
 #include <cstdio>
+#include <memory>
+#include <coroutines/task_passing_data_over_promise.hpp>
 
-namespace task_example_with_passing_data_over_promise
+namespace
 {
-
   class promise;
 
   using handle_t = std::coroutine_handle<promise>;
@@ -21,27 +22,35 @@ namespace task_example_with_passing_data_over_promise
     handle_t handler_{};
   };
 
-  class Task
+  class TaskHandler
   {
   public:
     using promise_type = promise;
 
-    explicit Task(handle_t);
-    Task(Task &&o) = delete;
-    Task(const Task &) = delete;
-    ~Task();
+    // used in get_return_object
+    explicit TaskHandler(handle_t);
+
+    // used in std::make_unique
+    TaskHandler(TaskHandler &&o);
+
+    TaskHandler(const TaskHandler &) = delete;
+    TaskHandler &operator=(const TaskHandler &) = delete;
+    TaskHandler &operator=(TaskHandler &&o) = delete;
+
+    // destroy handler
+    ~TaskHandler(void);
 
     // called from "task": put a value and wake up the coroutine
     void send(int v);
 
   private:
-    handle_t handler{};
+    handle_t handler_{};
   };
 
   class promise
   {
   public:
-    Task get_return_object() { return Task{handle_t::from_promise(*this)}; }
+    TaskHandler get_return_object() { return TaskHandler{handle_t::from_promise(*this)}; }
     std::suspend_never initial_suspend(void) noexcept { return {}; }
     std::suspend_always final_suspend(void) noexcept { return {}; }
     void return_void(void) {}
@@ -50,19 +59,24 @@ namespace task_example_with_passing_data_over_promise
     std::optional<int> value{};
   };
 
-  Task::Task(handle_t hh) : handler(hh) {}
+  TaskHandler::TaskHandler(handle_t h) : handler_(h) {}
 
-  Task::~Task()
+  TaskHandler::TaskHandler(TaskHandler &&o) : handler_(o.handler_)
   {
-    if (handler)
-      handler.destroy();
+    o.handler_ = {};
+  }
+
+  TaskHandler::~TaskHandler()
+  {
+    if (handler_)
+      handler_.destroy();
   }
 
   // called from "task": put a value and wake up the coroutine
-  void Task::send(int v)
+  void TaskHandler::send(int v)
   {
-    handler.promise().value = v;
-    handler.resume();
+    handler_.promise().value = v;
+    handler_.resume();
   }
 
   bool Awaiatable::await_ready() const noexcept
@@ -83,7 +97,7 @@ namespace task_example_with_passing_data_over_promise
   }
 
   // Coroutine: waits for data via co_await Event and prints it
-  Task counter(void)
+  TaskHandler counter(void)
   {
     for (;;)
     {
@@ -92,14 +106,16 @@ namespace task_example_with_passing_data_over_promise
     }
   }
 
-  void execute(void)
-  {
+  std::unique_ptr<TaskHandler> task_handler;
+}
 
-    Task task = counter();
-    for (int i = 0; i < 17; ++i)
-    {
-      printf("execution loop on callable side\n");
-      task.send(i); // send the value and wake up the coroutine
-    }
+void coroutine_task_example_passing_data_over_promise(void)
+{
+
+  task_handler = std::make_unique<TaskHandler>(counter());
+  for (int i = 0; i < 17; ++i)
+  {
+    printf("execution loop on callable side\n");
+    task_handler->send(i); // send the value and wake up the coroutine
   }
 }

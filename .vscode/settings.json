@@ -51,6 +51,9 @@
         "typeinfo": "cpp",
         "cmsis_os.h": "c",
         "main.h": "c",
-        "stdio.h": "c"
+        "stdio.h": "c",
+        "chrono": "cpp",
+        "cstring": "cpp",
+        "mutex": "cpp"
     }
 }
