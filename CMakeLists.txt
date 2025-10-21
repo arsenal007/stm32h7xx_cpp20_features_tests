@@ -52,8 +52,9 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     # Add user sources here
     ${CMAKE_SOURCE_DIR}/Core/Src/gettimeofday.c
     ${CMAKE_SOURCE_DIR}/Core/Src/uart_task.c
-    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/task_passing_data_over_promise.cpp
-    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task_pass_over_argument.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/passing_data_over_promise.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/delayed.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/passing_data_over_coroutine_argument.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp

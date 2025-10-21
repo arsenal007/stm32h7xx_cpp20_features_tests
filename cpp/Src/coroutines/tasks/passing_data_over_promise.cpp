@@ -2,7 +2,7 @@
 #include <optional>
 #include <cstdio>
 #include <memory>
-#include <coroutines/task_passing_data_over_promise.hpp>
+#include <coroutines/tasks/passing_data_over_promise.hpp>
 
 namespace
 {
@@ -106,16 +106,22 @@ namespace
     }
   }
 
-  std::unique_ptr<TaskHandler> task_handler;
+  std::unique_ptr<TaskHandler> task_handler{};
 }
 
-void coroutine_task_example_passing_data_over_promise(void)
+namespace coroutines
 {
-
-  task_handler = std::make_unique<TaskHandler>(counter());
-  for (int i = 0; i < 17; ++i)
+  namespace tasks
   {
-    printf("execution loop on callable side\n");
-    task_handler->send(i); // send the value and wake up the coroutine
+    void passing_data_over_promise(void)
+    {
+
+      task_handler = std::make_unique<TaskHandler>(counter());
+      for (int i = 0; i < 17; ++i)
+      {
+        printf("execution loop on callable side\n");
+        task_handler->send(i); // send the value and wake up the coroutine
+      }
+    }
   }
 }

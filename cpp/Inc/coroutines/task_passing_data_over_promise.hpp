@@ -1,7 +1,0 @@
-#ifndef TASK_PASSING_DATA_OVER_PROMISE_HPP
-#define TASK_PASSING_DATA_OVER_PROMISE_HPP
-
-
-void coroutine_task_example_passing_data_over_promise(void);
-
-#endif // TASK_PASSING_ARGUMENTS_OVER_PROMISE_HPP
