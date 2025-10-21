@@ -55,9 +55,8 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/passing_data_over_promise.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/delayed.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/tasks/passing_data_over_coroutine_argument.cpp
-    ${CMAKE_SOURCE_DIR}/cpp/Src/runtime_initial_suspend.cpp
-    ${CMAKE_SOURCE_DIR}/cpp/Src/simple.cpp
-    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines_task.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/runtime_initial_suspend.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/simple.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/delayed_execution.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/parse_uart_command.cpp
 )

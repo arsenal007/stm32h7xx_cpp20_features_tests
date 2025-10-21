@@ -2,12 +2,13 @@
 
 #include <cstdio>
 #include <coroutine>
+#include <memory>
 #include <handler.hpp>
-#include <runtime_initial_suspend.hpp>
+#include <coroutines/runtime_initial_suspend.hpp>
 
 #include "cmsis_os.h"
 
-namespace runtime_initial_suspend
+namespace
 {
     class RuntimeAwait
     {
@@ -16,7 +17,7 @@ namespace runtime_initial_suspend
         bool await_ready() const noexcept { return ready_; }
         template <typename T>
         void await_suspend(std::coroutine_handle<T>) const noexcept {}
-        void await_resume() const noexcept {}
+        void await_resume(void) const noexcept {}
 
     private:
         bool ready_;
@@ -27,16 +28,16 @@ namespace runtime_initial_suspend
         DynamicPromise(bool ready) : ready_{ready} {}
 
         Handler<DynamicPromise> get_return_object() { return Handler<DynamicPromise>{std::coroutine_handle<DynamicPromise>::from_promise(*this)}; }
-        RuntimeAwait initial_suspend() { return RuntimeAwait{ready_}; }
-        std::suspend_always final_suspend() noexcept { return {}; }
-        void unhandled_exception() {}
-        void return_void() {}
+        RuntimeAwait initial_suspend(void) { return RuntimeAwait{ready_}; }
+        std::suspend_always final_suspend(void) noexcept { return {}; }
+        void unhandled_exception(void) {}
+        void return_void(void) {}
 
     private:
         bool ready_;
     };
 
-    Handler<DynamicPromise> runtime_initial_suspend(bool ready)
+    Handler<DynamicPromise> runtime_initial_suspend_coroutine(bool ready)
     {
         if (ready)
             printf("Runtime initial suspend coroutine: await_ready = true \n");
@@ -45,9 +46,15 @@ namespace runtime_initial_suspend
         co_return;
     }
 
-    void execute(void)
+    std::unique_ptr<Handler<DynamicPromise>> handler_await_ptr{};
+    std::unique_ptr<Handler<DynamicPromise>> handler_run_ptr{};
+}
+
+namespace coroutines
+{
+    void runtime_initital_suspend(void)
     {
-        Handler<DynamicPromise> handler_await = runtime_initial_suspend(true);
-        Handler<DynamicPromise> handler_run = runtime_initial_suspend(false);
+        handler_await_ptr = std::make_unique<Handler<DynamicPromise>>(runtime_initial_suspend_coroutine(true));
+        handler_run_ptr = std::make_unique<Handler<DynamicPromise>>(runtime_initial_suspend_coroutine(false));
     }
 }

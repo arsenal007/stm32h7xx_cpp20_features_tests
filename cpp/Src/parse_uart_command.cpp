@@ -7,8 +7,8 @@
 #include <optional>
 #include <handler.hpp>
 #include <memory>
-#include <simple.hpp>
-
+#include <coroutines/simple.hpp>
+#include <coroutines/runtime_initial_suspend.hpp>
 #include <coroutines/tasks/passing_data_over_promise.hpp>
 #include <coroutines/tasks/delayed.hpp>
 #include <coroutines/tasks/passing_data_over_coroutine_argument.hpp>
@@ -20,7 +20,7 @@ namespace
     {
         if (cmd == "CORO_SIMPLE")
         {
-            simple::execute();
+            coroutines::simple();
         }
         else if (cmd == "DELAYED")
         {
@@ -42,6 +42,10 @@ namespace
         else if (cmd == "CORO_PASSING_DATA_OVER_COROUTINE_ARGUMENT")
         {
             coroutines::tasks::passing_data_over_coroutine_argument();
+        }
+        else if (cmd == "CORO_RUNTIME_INITIAL_SUSPEND")
+        {
+            coroutines::runtime_initital_suspend();
         }
         else
         {

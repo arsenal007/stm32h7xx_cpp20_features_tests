@@ -2,9 +2,8 @@
 #include <optional>
 #include <cstdio>
 #include <memory>
-#include <coroutines_task.h>
 #include <handler.hpp>
-#include <simple.hpp>
+#include <coroutines/simple.hpp>
 
 namespace
 {
@@ -46,10 +45,10 @@ namespace
   Handler<suspend_never> handler_initially_suspended_never{};
 }
 
-namespace simple
+namespace coroutines
 {
 
-  void execute(void)
+  void simple(void)
   {
     handler_initially_suspended_always = initial_suspend_always();
     handler_initially_suspended_never = initial_suspend_never();
