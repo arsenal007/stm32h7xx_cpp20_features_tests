@@ -3,15 +3,17 @@
 #include <cstdio>
 #include <memory>
 #include <coroutines/tasks/passing_data_over_promise.hpp>
+#include <coroutines/value_promise.hpp>
 
 namespace
 {
-  class promise;
 
+  class TaskHandler;
+  using promise = value_promise<TaskHandler>;
   using handle_t = std::coroutine_handle<promise>;
 
   // --- awaitable interface ---
-  class Awaiatable
+  class Awaitable
   {
   public:
     bool await_ready() const noexcept;
@@ -47,18 +49,6 @@ namespace
     handle_t handler_{};
   };
 
-  class promise
-  {
-  public:
-    TaskHandler get_return_object() { return TaskHandler{handle_t::from_promise(*this)}; }
-    std::suspend_never initial_suspend(void) noexcept { return {}; }
-    std::suspend_always final_suspend(void) noexcept { return {}; }
-    void return_void(void) {}
-    void unhandled_exception(void) { std::terminate(); }
-
-    std::optional<int> value{};
-  };
-
   TaskHandler::TaskHandler(handle_t h) : handler_(h) {}
 
   TaskHandler::TaskHandler(TaskHandler &&o) : handler_(o.handler_)
@@ -75,24 +65,24 @@ namespace
   // called from "task": put a value and wake up the coroutine
   void TaskHandler::send(int v)
   {
-    handler_.promise().value = v;
+    handler_.promise().value_ = v;
     handler_.resume();
   }
 
-  bool Awaiatable::await_ready() const noexcept
+  bool Awaitable::await_ready() const noexcept
   {
-    if (!Awaiatable::handler_)
+    if (!handler_)
       return false;
-    return Awaiatable::handler_.promise().value.has_value();
+    return handler_.promise().value_.has_value();
   }
 
-  void Awaiatable::await_suspend(handle_t h) noexcept { Awaiatable::handler_ = h; }
+  void Awaitable::await_suspend(handle_t h) noexcept { handler_ = h; }
 
-  int Awaiatable::await_resume() noexcept
+  int Awaitable::await_resume() noexcept
   {
-    int v = *Awaiatable::handler_.promise().value;
-    Awaiatable::handler_.promise().value.reset();
-    Awaiatable::handler_ = {};
+    int v = *handler_.promise().value_;
+    handler_.promise().value_.reset();
+    handler_ = {};
     return v;
   }
 
@@ -101,7 +91,7 @@ namespace
   {
     for (;;)
     {
-      int x = co_await Awaiatable{};
+      int x = co_await Awaitable{};
       printf("passing data over promise input value inside coroutine: %d\n", x);
     }
   }

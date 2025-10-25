@@ -12,6 +12,7 @@
 #include <coroutines/tasks/passing_data_over_promise.hpp>
 #include <coroutines/tasks/delayed.hpp>
 #include <coroutines/tasks/passing_data_over_coroutine_argument.hpp>
+#include <coroutines/generators/Awaitable.hpp>
 
 namespace
 {
@@ -47,7 +48,12 @@ namespace
         {
             coroutines::runtime_initital_suspend();
         }
+        else if (cmd == "CORO_GENERATOR_AWAITABLE")
+        {
+            coroutines::generators::awaitable();
+        }
         else
+
         {
             printf("Unknown command: %s\n", cmd.c_str());
         }
