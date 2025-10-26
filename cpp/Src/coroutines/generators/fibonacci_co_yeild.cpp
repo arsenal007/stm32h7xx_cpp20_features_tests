@@ -1,33 +1,17 @@
-#include <coroutines/generators/Awaitable.hpp>
 
-#include <coroutine>
 #include <optional>
-#include <memory>
-#include <cstdint>
-#include <coroutines/value_promise.hpp>
+#include <coroutine>
+#include <cstdio>
 #include <utility>
+#include <memory>
+#include <coroutines/generators/fibonacci_co_yield.hpp>
 
 namespace
 {
+    struct promise;
 
-    class HandlerGenerator;
-    using promise = value_promise<HandlerGenerator>;
-
-    class Awaitable
+    struct HandlerGenerator
     {
-    public:
-        Awaitable(std::optional<int32_t> v) : value_(v) {}
-        bool await_ready(void) const noexcept { return false; }
-        void await_suspend(std::coroutine_handle<promise> handle) noexcept { handle.promise().value_ = value_; }
-        void await_resume(void) const noexcept {}
-
-    private:
-        std::optional<int32_t> value_{};
-    };
-
-    class HandlerGenerator
-    {
-    public:
         using promise_type = promise;
 
         explicit HandlerGenerator(std::coroutine_handle<promise_type> h) : handle_(h)
@@ -42,7 +26,6 @@ namespace
         }
 
         // move assignment operator used in global variable assignment
-
         ~HandlerGenerator()
         {
             printf("HandlerGenerator destructor called 0x%08X, coroutine frame: 0x%08X\n", (unsigned int)this, (unsigned int)handle_.address());
@@ -53,12 +36,7 @@ namespace
         HandlerGenerator(const HandlerGenerator &) = delete;
         HandlerGenerator &operator=(const HandlerGenerator &) = delete;
 
-        std::optional<int32_t> get_value(void) const
-        {
-            auto result = handle_.promise().value_;
-            handle_.resume();
-            return result;
-        }
+        std::optional<int32_t> get_value(void) const;
 
     private:
         std::coroutine_handle<promise_type> handle_;
@@ -73,15 +51,38 @@ namespace
         }
     };
 
-    HandlerGenerator catalan_numbers(void)
+    struct promise
     {
-        int32_t n = 0;
-        int32_t c = 1;
+        HandlerGenerator get_return_object() { return HandlerGenerator{std::coroutine_handle<promise>::from_promise(*this)}; }
+        std::suspend_never initial_suspend(void) noexcept { return {}; }
+        std::suspend_always final_suspend(void) noexcept { return {}; }
+        void return_void(void) {}
+        void unhandled_exception(void) { std::terminate(); }
+
+        std::suspend_always yield_value(int32_t v) noexcept
+        {
+            value_ = v;
+            return {};
+        }
+
+        std::optional<int32_t> value_{};
+    };
+
+    std::optional<int32_t> HandlerGenerator::get_value(void) const
+    {
+        auto result = handle_.promise().value_;
+        handle_.resume();
+        return result;
+    }
+
+    HandlerGenerator fibonacci_numbers(void)
+    {
+        int32_t i1 = 1;
+        int32_t i2 = 1;
         while (true)
         {
-            co_await Awaitable{c};
-            n++;
-            c = c * 2 * (2 * n - 1) / (n + 1);
+            co_yield i1;
+            i1 = std::exchange(i2, i1 + i2);
         }
     }
 
@@ -92,13 +93,13 @@ namespace coroutines
 {
     namespace generators
     {
-        void awaitable(void)
+        void fibonacci_co_yield(void)
         {
-            printf("Awaitable catalan numbers generator\n");
-            handler_ptr = std::make_unique<HandlerGenerator>(catalan_numbers());
-            for (size_t i = 0; i < 10; i++)
+            printf("Fibonacci co_yield generator\n");
+            handler_ptr = std::make_unique<HandlerGenerator>(fibonacci_numbers());
+            for (size_t i = 0; i < 17; i++)
             {
-                printf("Generator awaitable received value: %ld\n", handler_ptr->get_value().value());
+                printf("Generator co_yeild received value: %ld\n", handler_ptr->get_value().value());
             }
         }
 

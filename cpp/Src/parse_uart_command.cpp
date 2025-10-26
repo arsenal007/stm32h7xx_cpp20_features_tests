@@ -13,6 +13,7 @@
 #include <coroutines/tasks/delayed.hpp>
 #include <coroutines/tasks/passing_data_over_coroutine_argument.hpp>
 #include <coroutines/generators/Awaitable.hpp>
+#include <coroutines/generators/fibonacci_co_yield.hpp>
 
 namespace
 {
@@ -52,6 +53,11 @@ namespace
         {
             coroutines::generators::awaitable();
         }
+        else if (cmd == "CORO_GENERATOR_CO_YIELD")
+        {
+            coroutines::generators::fibonacci_co_yield();
+        }
+
         else
 
         {
