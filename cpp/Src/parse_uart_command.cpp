@@ -14,6 +14,7 @@
 #include <coroutines/tasks/passing_data_over_coroutine_argument.hpp>
 #include <coroutines/generators/Awaitable.hpp>
 #include <coroutines/generators/fibonacci_co_yield.hpp>
+#include <coroutines/generators/co_return.hpp>
 
 namespace
 {
@@ -56,6 +57,10 @@ namespace
         else if (cmd == "CORO_GENERATOR_CO_YIELD")
         {
             coroutines::generators::fibonacci_co_yield();
+        }
+        else if (cmd == "CORO_GENERATOR_CO_RETURN")
+        {
+            coroutines::generators::simple_co_return();
         }
 
         else

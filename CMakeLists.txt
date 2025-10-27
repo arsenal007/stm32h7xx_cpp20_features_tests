@@ -59,6 +59,7 @@ target_sources(${CMAKE_PROJECT_NAME} PRIVATE
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/simple.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/generators/Awaitable.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/generators/fibonacci_co_yeild.cpp
+    ${CMAKE_SOURCE_DIR}/cpp/Src/coroutines/generators/co_return.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/delayed_execution.cpp
     ${CMAKE_SOURCE_DIR}/cpp/Src/parse_uart_command.cpp
 )
